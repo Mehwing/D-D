@@ -1,0 +1,260 @@
+# Scénario: La Forêt Interdite
+# Auteur: Maître du Jeu Virtuel
+# Description: Une aventure dans une forêt mystérieuse remplie de dangers et de trésors
+
+[scenario]
+title: La Forêt Interdite
+description: Une aventure dans une forêt mystérieuse remplie de dangers et de trésors.
+author: Maître du Jeu Virtuel
+
+[event:start]
+type: text
+title: Début de l'aventure
+text: Vous entrez dans la Forêt Interdite, un lieu légendaire rempli de mystères et de dangers. Les arbres sont hauts et sombres, et l'air est lourd de magie ancienne. Devant vous, un sentier se divise en deux directions.
+next: path_choice
+
+[event:path_choice]
+type: choice
+text: Quel chemin prenez-vous?
+choice1: Prendre le sentier de gauche, qui semble plus sombre et mystérieux -> left_path
+choice2: Prendre le sentier de droite, qui semble plus éclairé et sûr -> right_path
+choice3: Explorer les buissons à côté du sentier -> bushes
+
+[event:left_path]
+type: text
+title: Le sentier sombre
+text: Vous prenez le sentier de gauche. Au fur et à mesure que vous avancez, l'obscurité devient plus épaisse. Soudain, vous entendez des bruits de pas derrière vous!
+
+Quatre gobelins surgissent des ombres, armés de cimeterres et d'arcs courts!
+next: goblin_combat
+
+[event:goblin_combat]
+type: combat
+combat: embuscade de gobelins
+next: after_goblin_combat
+
+[event:after_goblin_combat]
+type: reward
+title: Victoire!
+text: Vous avez vaincu les gobelins! En fouillant leurs corps, vous trouvez quelques objets.
+reward_items: épée courte, potion de soins
+reward_gold: 50
+reward_xp: 200
+next: treasure_chest
+
+[event:treasure_chest]
+type: choice
+title: Un coffre au trésor
+text: Derrière les gobelins, vous trouvez un coffre en bois rouillé. Il semble verrouillé.
+choice1: Essayer de forcer le coffre -> force_chest
+choice2: Chercher une clé sur les gobelins -> search_key
+choice3: Laisser le coffre et continuer -> continue_path
+
+[event:force_chest]
+type: check
+skill: athletics
+dc: 15
+success: chest_success
+failure: chest_trap
+
+[event:chest_success]
+type: reward
+title: Succès!
+text: Avec un grand effort, vous parvez à ouvrir le coffre! À l'intérieur, vous trouvez:
+reward_items: épée longue, armure de cuir clouté
+reward_gold: 100
+next: continue_path
+
+[event:chest_trap]
+type: trap
+dc: 14
+success: chest_success
+failure: chest_trap_hit
+
+[event:chest_trap_hit]
+type: text
+title: Blessé!
+text: La lame vous transperce! Vous subissez des dégâts mais le coffre s'ouvre.
+next: chest_success
+
+[event:search_key]
+type: check
+skill: investigation
+dc: 12
+success: key_found
+failure: no_key
+
+[event:key_found]
+type: text
+title: Clé trouvée!
+text: Vous trouvez une petite clé en fer sur le corps d'un gobelin. Elle ouvre le coffre!
+next: chest_success
+
+[event:no_key]
+type: text
+title: Pas de clé
+text: Après une recherche minutieuse, vous ne trouvez pas de clé. Le coffre reste verrouillé.
+next: continue_path
+
+[event:continue_path]
+type: text
+title: Continuer le chemin
+text: Vous continuez votre chemin dans la forêt. Après quelques heures de marche, vous arrivez à une clairière avec une ancienne pierre runique au centre.
+next: runestone
+
+[event:runestone]
+type: choice
+title: La pierre runique
+text: La pierre est couverte de runes anciennes. Elle semble pulsée d'une énergie magique.
+choice1: Toucher la pierre pour activer sa magie -> touch_stone
+choice2: Étudier les runes de plus près -> study_runes
+choice3: Ignorer la pierre et continuer -> leave_stone
+
+[event:touch_stone]
+type: combat
+enemies: golem de pierre
+text: En touchant la pierre, vous déclenchez un ancien sort de protection! La pierre prend vie et un golem de pierre apparaît devant vous!
+next: after_stone_combat
+
+[event:after_stone_combat]
+type: reward
+title: Victoire contre le golem
+text: Vous avez vaincu le golem de pierre! La pierre runique s'éteint et révèle un passage secret.
+reward_items: potion de soins supérieurs
+reward_gold: 200
+reward_xp: 500
+next: secret_passage
+
+[event:secret_passage]
+type: text
+title: Passage secret
+text: Le passage secret mène à une chambre cachée. Au centre, vous trouvez un autel avec une épée légendaire posée dessus. C'est la célèbre Épée du Dragon!
+next: final_choice
+
+[event:final_choice]
+type: choice
+title: L'Épée du Dragon
+text: L'épée brille d'une lumière intense. Prendre cette arme pourrait changer votre destin.
+choice1: Prendre l'épée et l'emmener avec vous -> take_sword
+choice2: Laisser l'épée ici, c'est trop dangereux -> leave_sword
+
+[event:take_sword]
+type: reward
+title: L'Épée est à vous!
+text: Vous prenez l'Épée du Dragon. Une vague de pouvoir vous traverse. Vous sentez que cette arme sera votre compagne pour de nombreuses aventures.
+reward_items: Épée du Dragon
+reward_xp: 1000
+next: end_good
+
+[event:leave_sword]
+type: text
+title: Sagesse
+text: Vous décidez de laisser l'épée. Parfois, la sagesse vaut plus que le pouvoir. Vous quittez la forêt avec un sentiment de paix.
+next: end_neutral
+
+[event:right_path]
+type: text
+title: Le sentier éclairé
+text: Vous prenez le sentier de droite. La lumière du soleil filtre à travers les feuilles, créant un environnement paisible. Après une heure de marche, vous arrivez à une rivière.
+next: river
+
+[event:river]
+type: choice
+title: La rivière
+text: La rivière est large mais peu profonde. Vous pouvez essayer de la traverser.
+choice1: Traverser la rivière à gué -> cross_river
+choice2: Suivre la rivière jusqu'à un pont -> follow_river
+choice3: Faire un repos près de la rivière -> rest_river
+
+[event:cross_river]
+type: check
+skill: athletics
+dc: 10
+success: cross_success
+failure: cross_failure
+
+[event:cross_success]
+type: text
+title: Traversée réussie
+text: Vous traversez la rivière sans problème. De l'autre côté, vous trouvez un chemin qui mène hors de la forêt.
+next: end_neutral
+
+[event:cross_failure]
+type: text
+title: Chute dans la rivière
+text: Vous glissez sur une pierre moussue et tombez dans la rivière! Vous perdez un peu d'équipement mais vous vous en sortez sain et sauf.
+next: end_bad
+
+[event:follow_river]
+type: text
+title: Suivre la rivière
+text: Vous suivez la rivière pendant plusieurs heures. Finalement, vous arrivez à un petit village. Les habitants vous accueillent chaleureusement.
+next: village
+
+[event:village]
+type: reward
+title: Arrivée au village
+text: Le maire du village vous remercie de votre visite et vous offre une récompense pour vos efforts.
+reward_gold: 100
+reward_xp: 150
+next: end_good
+
+[event:rest_river]
+type: rest
+title: Repos près de la rivière
+text: Vous faites une pause bien méritée près de la rivière. L'eau fraîche et le chant des oiseaux vous revitalisent.
+next: after_rest
+
+[event:after_rest]
+type: text
+title: Après le repos
+text: Rafraîchis, vous continuez votre voyage. La forêt semble moins menaçante maintenant.
+next: end_good
+
+[event:bushes]
+type: check
+skill: perception
+dc: 12
+success: bushes_success
+failure: bushes_failure
+
+[event:bushes_success]
+type: reward
+title: Découverte!
+text: Vous trouvez un petit sac caché dans les buissons! Il contient:
+reward_items: potion de soins, potion de force
+reward_gold: 30
+next: continue_path
+
+[event:bushes_failure]
+type: trap
+dc: 15
+success: bushes_escape
+failure: bushes_caught
+
+[event:bushes_escape]
+type: text
+title: Échappée!
+text: Vous parvez à éviter le piège au dernier moment!
+next: continue_path
+
+[event:bushes_caught]
+type: text
+title: Capturé!
+text: Vous êtes capturé par le piège! Il vous faut du temps pour vous libérer.
+next: end_bad
+
+[event:end_good]
+type: end
+title: Fin - Victoire!
+text: Félicitations! Vous avez complété votre aventure dans la Forêt Interdite avec succès. Vos actions héroïques seront racontées pendant des générations!
+
+[event:end_neutral]
+type: end
+title: Fin - Aventure terminée
+text: Votre aventure dans la Forêt Interdite touche à sa fin. Vous avez survécu et appris de nouvelles choses sur vous-même.
+
+[event:end_bad]
+type: end
+title: Fin - Défaite
+text: Votre aventure se termine ici. La Forêt Interdite vous a vaincu, mais ne désespérez pas - chaque échec est une leçon pour la prochaine fois.
