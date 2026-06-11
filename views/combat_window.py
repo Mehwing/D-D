@@ -1,6 +1,7 @@
 """
 Combat window for D&D application
 """
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List, Optional, Callable, Tuple
@@ -98,6 +99,14 @@ class CombatWindow:
         # Right panel - combat log and actions
         self.right_panel = ttk.Frame(combat_area, padding="10")
         combat_area.add(self.right_panel)
+        
+        # Python 3.13 compatibility: paneconfigure was removed, use pane() method
+        if sys.version_info >= (3, 13):
+            try:
+                combat_area.pane(0, width=250)
+            except (tk.TclError, AttributeError):
+                # Fallback: width was already set in add() call
+                pass
         
         # Create left panel
         self._create_left_panel()
