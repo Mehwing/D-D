@@ -94,19 +94,27 @@ class CombatWindow:
         
         # Left panel - combatants list
         self.left_panel = ttk.Frame(combat_area, width=250, padding="10")
-        combat_area.add(self.left_panel, width=250)
         
         # Right panel - combat log and actions
         self.right_panel = ttk.Frame(combat_area, padding="10")
+        
+        # Add panes - Python 3.13 doesn't accept width in add() anymore
+        combat_area.add(self.left_panel)
         combat_area.add(self.right_panel)
         
-        # Python 3.13 compatibility: paneconfigure was removed, use pane() method
+        # Python 3.13 compatibility: use pane() method to set width
+        # For Python < 3.13, width must be set in add(), so we recreate with width
         if sys.version_info >= (3, 13):
             try:
                 combat_area.pane(0, width=250)
             except (tk.TclError, AttributeError):
-                # Fallback: width was already set in add() call
                 pass
+        else:
+            # For Python < 3.13, we need to recreate panes with width
+            combat_area.forget(0)
+            combat_area.forget(1)
+            combat_area.add(self.left_panel, width=250)
+            combat_area.add(self.right_panel)
         
         # Create left panel
         self._create_left_panel()

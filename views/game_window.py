@@ -62,20 +62,27 @@ class GameWindow:
         
         # Create left panel (character profiles)
         self.left_panel = ttk.Frame(self.main_container, width=300, padding="10")
-        self.main_container.add(self.left_panel, width=300)
         
         # Create right panel (main content)
         self.right_panel = ttk.Frame(self.main_container, padding="10")
+        
+        # Add panes - Python 3.13 doesn't accept width in add() anymore
+        self.main_container.add(self.left_panel)
         self.main_container.add(self.right_panel)
         
-        # Python 3.13 compatibility: paneconfigure was removed, use pane() method
-        # Set minimum width for left pane
+        # Python 3.13 compatibility: use pane() method to set width
+        # For Python < 3.13, width must be set in add(), so we recreate with width
         if sys.version_info >= (3, 13):
             try:
                 self.main_container.pane(0, width=300)
             except (tk.TclError, AttributeError):
-                # Fallback: width was already set in add() call
                 pass
+        else:
+            # For Python < 3.13, we need to recreate panes with width
+            self.main_container.forget(0)
+            self.main_container.forget(1)
+            self.main_container.add(self.left_panel, width=300)
+            self.main_container.add(self.right_panel)
         
         # Create UI
         self._create_left_panel()
