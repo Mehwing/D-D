@@ -1,6 +1,7 @@
 """
 Main game window for D&D application
 """
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 from typing import List, Dict, Optional, Callable
@@ -66,6 +67,15 @@ class GameWindow:
         # Create right panel (main content)
         self.right_panel = ttk.Frame(self.main_container, padding="10")
         self.main_container.add(self.right_panel)
+        
+        # Python 3.13 compatibility: paneconfigure was removed, use pane() method
+        # Set minimum width for left pane
+        if sys.version_info >= (3, 13):
+            try:
+                self.main_container.pane(0, width=300)
+            except (tk.TclError, AttributeError):
+                # Fallback: width was already set in add() call
+                pass
         
         # Create UI
         self._create_left_panel()
