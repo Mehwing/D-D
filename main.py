@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import sys
 import os
+from typing import List
 
 from models.scenario import Scenario, create_sample_scenario
 from models.character import Character, create_random_character
