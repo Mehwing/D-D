@@ -143,11 +143,11 @@ class VoteCounterApp(tk.Tk):
         ))
 
         if total_exprime == 0:
-            self.label_verdict.config(text="Aucun vote exprimé", fg="#616161")
+            self.label_verdict.config(text="Aucun vote exprimé", foreground="#616161")
         elif acceptee:
-            self.label_verdict.config(text="LOI ACCEPTÉE ✔", fg="#2e7d32")
+            self.label_verdict.config(text="LOI ACCEPTÉE ✔", foreground="#2e7d32")
         else:
-            self.label_verdict.config(text="LOI REJETÉE ✘", fg="#c62828")
+            self.label_verdict.config(text="LOI REJETÉE ✘", foreground="#c62828")
 
 
 if __name__ == "__main__":
